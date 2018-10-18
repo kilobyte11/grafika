@@ -19,6 +19,6 @@ public class Polygon implements Drawable{
 
     @Override
     public void draw(Renderer renderer) {
-        // todo
+     // todo   renderer.polygon(List<Point> points);
     }
 }
