@@ -1,5 +1,7 @@
 package utils;
 
+import drawables.Polygon;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -108,20 +110,29 @@ public class Renderer {
 
     }
 
-    public void polygon(int x1, int y1, int x2, int y2, int count) {
+    public void polygon(Polygon polygon){
+        // todo
+    }
+
+    public void regularPolygon(int x1, int y1, int x2, int y2, int count) {
         double x0 = x2 - x1;
         double y0 = y2 - y1;
         double circleRadius = 2 * Math.PI;
         double step = circleRadius / (double) count;
+        int startX = (int) x0 + x1;
+        int startY = (int) y0 + y1;
 
-        for (double i = 0; i < circleRadius; i += step) {
+        for (double i = 0; i < count+4; i += step) {
             // dle rotační matice
-
-            double x = x0 * Math.cos(step) + y0 * Math.sin(step);
-            double y = y0 * Math.cos(step) - x0 * Math.sin(step);
-            lineDDA((int) x0 + x1, (int) y0 + y1, (int) x + x1, (int) y + y1);
-
+            double x = x0 * Math.cos(i) + y0 * Math.sin(i);
+            double y = y0 * Math.cos(i) - x0 * Math.sin(i);
+            lineDDA(startX, startY, (int) x + x1, (int) y + y1);
+            startX = (int) x + x1;
+            startY = (int) y + y1;
+            // todo
         }
 
+
     }
+
 }
