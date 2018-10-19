@@ -1,14 +1,17 @@
 package utils;
 
+import drawables.Point;
 import drawables.Polygon;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class Renderer {
     private int color;
     private BufferedImage img;
 
+    private int startX, startY;
 
     public Renderer(BufferedImage img) {
         this.img = img;
@@ -110,8 +113,15 @@ public class Renderer {
 
     }
 
-    public void polygon(Polygon polygon){
-        // todo
+    public void polygon(List<Point> points){
+        for (int i =1 ; i < points.size(); i++){
+            startX = points.get(i-1).getX();
+            startY = points.get(i-1).getY();
+            int endX = points.get(i).getX();
+            int endY = points.get(i).getY();
+            lineDDA(startX, startY, endX, endY);
+        }
+        lineDDA(points.get(0).getX(), points.get(0).getY(), points.get(points.size()-1).getX(), points.get(points.size()-1).getY());
     }
 
     public void regularPolygon(int x1, int y1, int x2, int y2, int count) {
