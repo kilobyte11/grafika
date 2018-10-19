@@ -10,8 +10,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+//import java.util.Timer;
+//import java.util.TimerTask;
 
 public class PgrfFrame extends JFrame implements MouseMotionListener {
     static int FPS = 1000/60;
@@ -26,8 +26,8 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private int count = 5;
     private boolean firstClick = true;
     private DrawableType type = DrawableType.LINE;
-// zk
-    Polygon polygon = new Polygon();
+
+    Polygon polygon;
 
     // todo vypsat klávesové zkratky a co dělají
     // todo do drawables přidat pravidelný polygon
@@ -51,65 +51,39 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         add(panel);
 
 
-
-        panel.addMouseMotionListener(this);
-/*
-        panel.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-                if (type == DrawableType.LINE){
-                    // zadávání úsečky
-                    if (firstClick){
-                        clickX = e.getX();
-                        clickY = e.getY();
-
-                    } else{
-                        drawables.add(new Line(clickX, clickY, e.getX(), e.getY()));
-                        super.mouseReleased(e);
-
-                    }
-                    firstClick = !firstClick; // uloží do firstClick opačnou hodnotu firstClick
-                }
-
-                if (type == DrawableType.POLYGON){
-                    // todo váš n-úhelník
-                }
-
-                if (type == DrawableType.REGULAR_POLYGON) {
-                    // todo polygon
-                }
-
-            }
-
-        });
-
-*/
-
         panel.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (type == DrawableType.LINE){
-                /*
                     if (drawables.size() > 1){
                         drawables.remove(drawables.size()-1);
                     }
                     drawables.add(new Line(clickX, clickY, e.getX(), e.getY()));
-                */
-                    renderer.lineDDA(clickX, clickY, e.getX(), e.getY());
+
+                    //renderer.lineDDA(clickX, clickY, e.getX(), e.getY());
+
                 }
 
 
                 // todo dodělat
                 if (type == DrawableType.POLYGON){
-
+                    /*
+                    if (drawables.size() > 1){
+                        drawables.remove(drawables.size()-1);
+                    }
+                    polygon.addPoint(new Point(e.getX(), e.getY()));
+                    */
                 }
 
                 if (type == DrawableType.REGULAR_POLYGON){
-                    renderer.regularPolygon(clickX, clickY, e.getX(), e.getY(), count);
+                    if (drawables.size() > 1){
+                        drawables.remove(drawables.size()-1);
+                    }
+                    drawables.add(new RegularPolygon(clickX, clickY, e.getX(), e.getY(), count));
+                    //renderer.regularPolygon(clickX, clickY, e.getX(), e.getY(), count);
                 }
 
+                draw();
             }
         });
 
@@ -126,8 +100,10 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                 // todo dodělat
                 if (type == DrawableType.POLYGON){
                     if (firstClick){
+                        polygon = new Polygon();
                         drawables.add(polygon);
                         polygon.addPoint(new Point(e.getX(), e.getY()));
+                        firstClick = !firstClick;
                     } else{
                         polygon.addPoint(new Point(e.getX(), e.getY()));
                     }
@@ -139,6 +115,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                     clickY = e.getY();
                 }
 
+                draw();
             }
 
             @Override
@@ -154,6 +131,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                     drawables.add(new RegularPolygon(clickX, clickY, e.getX(), e.getY(), count));
                 }
 
+                draw();
             }
 
         });
@@ -198,7 +176,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         setLocationRelativeTo(null);
 
         renderer = new Renderer(img);
-
+/*
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -206,7 +184,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                 draw();
             }
         }, 100, FPS);
-
+*/
         draw();
     }
 
