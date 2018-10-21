@@ -13,6 +13,14 @@ public class Renderer {
 
     private int startX, startY;
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     public Renderer(BufferedImage img) {
         this.img = img;
         color = Color.RED.getRGB();
@@ -35,9 +43,7 @@ public class Renderer {
                 int p = x1;
                 x1 = x2;
                 x2 = p;
-                p = y1;
                 y1 = y2;
-                //y2 = p;
             }
 
             float k = (float) dy / (float) dx;
@@ -53,9 +59,7 @@ public class Renderer {
                 int p = y1;
                 y1 = y2;
                 y2 = p;
-                p = x1;
                 x1 = x2;
-                //x2 = p;
             }
 
             float k = (float) dx / (float) dy;
@@ -133,13 +137,11 @@ public class Renderer {
         int startY = (int) y0 + y1;
 
         for (double i = 0; i < count+4; i += step) {
-            // dle rotační matice
             double x = x0 * Math.cos(i) + y0 * Math.sin(i);
             double y = y0 * Math.cos(i) - x0 * Math.sin(i);
             lineDDA(startX, startY, (int) x + x1, (int) y + y1);
             startX = (int) x + x1;
             startY = (int) y + y1;
-            // todo
         }
 
 
