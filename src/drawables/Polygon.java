@@ -19,6 +19,18 @@ public class Polygon implements Drawable{
 
     @Override
     public void draw(Renderer renderer) {
-        renderer.polygon(points);
+        if (points.size() > 1){
+            for (int i = 0; i < points.size(); i++){
+                Point point1 = points.get(i);
+                Point point2 = points.get((i+1) % points.size());
+                renderer.lineDDA(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+            }
+        }
+        //renderer.polygon(points);
+    }
+
+    @Override
+    public void modifyLastPoint(int x, int y) {
+        // todo
     }
 }

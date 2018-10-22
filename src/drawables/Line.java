@@ -17,4 +17,10 @@ public class Line implements Drawable{
     public void draw(Renderer renderer) {
         renderer.lineDDA(x1, y1, x2, y2);
     }
+
+    @Override
+    public void modifyLastPoint(int x, int y) {
+        this.x2 = x;
+        this.y2 = y;
+    }
 }

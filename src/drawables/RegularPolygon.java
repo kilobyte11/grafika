@@ -21,4 +21,9 @@ public class RegularPolygon implements Drawable{
     public void draw(Renderer renderer) {
         renderer.regularPolygon(x1, y1, x2, y2, count);
     }
+
+    @Override
+    public void modifyLastPoint(int x, int y) {
+        //todo
+    }
 }

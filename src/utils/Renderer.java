@@ -26,11 +26,16 @@ public class Renderer {
         color = Color.RED.getRGB();
     }
 
-    private void drawPixel(int x, int y) {
+    private void drawPixel(int x, int y){
+        drawPixel(x, y, color);
+    }
+
+    private void drawPixel(int x, int y, int color) {
         if (x < 0 || x >= 800) return;
         if (y < 0 || y >= 600) return;
         img.setRGB(x, y, color);
     }
+
 
     public void lineTrivial(int x1, int y1, int x2, int y2) {
         // y = k*x+q
@@ -145,6 +150,17 @@ public class Renderer {
         }
 
 
+    }
+
+    public void seedFill(int x, int y, int oldColor, int newColor){
+        if (oldColor == img.getRGB(x, y)){
+            drawPixel(x, y, Color.BLUE.getRGB());
+            seedFill(x+1, y, oldColor, newColor);
+            seedFill(x-1, y, oldColor, newColor);
+            seedFill(x, y+1, oldColor, newColor);
+            seedFill(x, y-1, oldColor, newColor);
+            // todo
+        }
     }
 
 }

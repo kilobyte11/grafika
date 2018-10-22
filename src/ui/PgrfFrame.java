@@ -5,6 +5,7 @@ import drawables.Point;
 import drawables.Polygon;
 import utils.Renderer;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private boolean firstClick = true;
     private DrawableType type = DrawableType.LINE;
     Polygon polygon;
+    private boolean fillMode = false;
 
     private List<Drawable> drawables;
+    private Drawable drawable;
 
 
     public static void main(String... args){
@@ -46,18 +49,24 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (type == DrawableType.LINE){
+                    /*
                     if (drawables.size() > 1){
                         drawables.remove(drawables.size()-1);
                     }
                     drawables.add(new Line(clickX, clickY, e.getX(), e.getY()));
+                    */
+                    //drawable = new Line(clickX, clickY, e.getX(), e.getY());
                 }
 
 
                 if (type == DrawableType.REGULAR_POLYGON){
+                    /*
                     if (drawables.size() > 1){
                         drawables.remove(drawables.size()-1);
                     }
                     drawables.add(new RegularPolygon(clickX, clickY, e.getX(), e.getY(), count));
+                    */
+                    drawable = new RegularPolygon(clickX, clickY, e.getX(), e.getY(), count);
                 }
 
                 draw();
@@ -70,11 +79,31 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
             public void mousePressed(MouseEvent e) {
                 if (type == DrawableType.LINE){
                     // zadávání úsečky
+                    if (firstClick){
                         clickX = e.getX();
                         clickY = e.getY();
+                        drawable = new Line(clickX, clickY, clickX, clickY);
+                    } else{
+                        drawable = null;
+                        drawables.add(new Line(clickX, clickY, e.getX(), e.getY()));
+                    }
                 }
 
                 if (type == DrawableType.POLYGON){
+                    if (drawable == null){
+                        drawable = new Polygon();
+                    }
+
+                    if (drawable instanceof Polygon){
+                        ((Polygon) drawable).addPoint(new Point(e.getX(), e.getY()));
+                    }else{
+                        drawable = null;
+                    }
+
+                    if(fillMode){
+                        renderer.seedFill(e.getX(),e.getY(), img.getRGB(e.getX(),e.getY()), Color.blue.getRGB());
+                    }
+                    /*
                     if (firstClick){
                         polygon = new Polygon();
                         drawables.add(polygon);
@@ -83,7 +112,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                     } else{
                         polygon.addPoint(new Point(e.getX(), e.getY()));
                     }
-
+                    */
                 }
 
                 if (type == DrawableType.REGULAR_POLYGON){
@@ -124,6 +153,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
 
                 }
 
+                // if (e.getKeyCode() == KeyEvent.VK_U){                } klávesa u
                 if (e.getKeyCode() == KeyEvent.getExtendedKeyCodeForChar(108)){
                     // písmeno l, změna na čáru
                     type = DrawableType.LINE;
@@ -139,6 +169,19 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                     type = DrawableType.POLYGON;
                 }
 
+                if (e.getKeyCode() == KeyEvent.VK_SPACE){
+                    if (drawable != null ){
+                        if (drawable instanceof Polygon){
+                            drawables.add(drawable);
+                            drawable = null;
+                        }
+                    }
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_F){
+                    fillMode = !fillMode;
+                }
+
                 super.keyReleased(e);
             }
         });
@@ -149,9 +192,15 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     }
 
     private void draw() {
-        img.getGraphics().fillRect(0,0, img.getWidth(), img.getHeight());
+        if (!fillMode) {
+            img.getGraphics().fillRect(0, 0, img.getWidth(), img.getHeight());
+        }
 
         for (Drawable drawable : drawables){
+            drawable.draw(renderer);
+        }
+
+        if (drawable != null){
             drawable.draw(renderer);
         }
 
@@ -170,6 +219,9 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        if (drawable != null){
+            drawable.modifyLastPoint(e.getX(), e.getY());
+        }
     }
 }
 
