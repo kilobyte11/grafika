@@ -1,6 +1,6 @@
 package ui;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import drawables.Drawable;
 import drawables.DrawableType;
@@ -32,11 +30,15 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private JPanel panel;
     private Renderer renderer;
     private int clickX, clickY;
+    private JLabel lbShape;
+    private JLabel lbHelp;
+    private String text = "tvar: čára";
+    private String textPrev;
 
     private List<Drawable> drawables;
     private Drawable drawable;
     private boolean firstClickLine = true;
-    private DrawableType type = DrawableType.POLYGON;
+    private DrawableType type = DrawableType.LINE;
     private boolean fillMode = false;
 
     public static void main(String... args) {
@@ -46,6 +48,25 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     }
 
     private void init(int width, int height) {
+        // popisek !!!!!!!!!!!!!!!!
+        Font fontShape = new Font("Arial", Font.BOLD, 20);
+        Font fontHelp = new Font("Arial", Font.BOLD, 15);
+
+        lbShape = new JLabel();
+        lbShape.setText(text);
+        lbShape.setFont(fontShape);
+        lbShape.setForeground(Color.BLACK);
+        lbShape.setHorizontalAlignment(SwingConstants.CENTER);
+        add(lbShape, BorderLayout.NORTH);
+
+        lbHelp = new JLabel();
+        lbHelp.setText(" U - úsečka, N - n-úhelník, F - vyplňování(zapnout/vypnout), SPACE - nový n-úhelník");
+        lbHelp.setFont(fontHelp);
+        lbHelp.setForeground(Color.BLACK);
+        lbHelp.setHorizontalAlignment(SwingConstants.LEFT);
+        add(lbHelp, BorderLayout.SOUTH);
+
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         setSize(width, height);
@@ -53,6 +74,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         drawables = new ArrayList<>();
         panel = new JPanel();
         add(panel);
+
 
         panel.addMouseMotionListener(this);
         panel.addMouseListener(new MouseAdapter() {
@@ -86,10 +108,13 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                             drawable = null;
                         }
                     }
+
                 } else {
-                    renderer.seedFill(e.getX(), e.getY(),
+                   renderer.seedFillTexture(e.getX(), e.getY(), img.getRGB(e.getX(),e.getY()));
+                /*    renderer.seedFill(e.getX(), e.getY(),
                             img.getRGB(e.getX(), e.getY()),
                             Color.BLACK.getRGB());
+                */
                 }
 
                 super.mouseClicked(e);
@@ -103,16 +128,31 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_U) {
                     type = DrawableType.LINE;
+                    if (!fillMode){
+                        text ="tvar: čára";
+                    }
+
                 }
                 if (e.getKeyCode() == KeyEvent.VK_N) {
                     type = DrawableType.POLYGON;
+                    if (!fillMode){
+                        text = "tvar: n-úhelník";
+                    }
+
                 }
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     finishPolygon();
                 }
                 if (e.getKeyCode() == KeyEvent.VK_F) {
                     fillMode = !fillMode;
+                    if (!fillMode){
+                        text = textPrev;
+                    }else{
+                        textPrev = text;
+                        text = "vyplňování";
+                    }
                 }
+
                 super.keyReleased(e);
             }
         });
@@ -126,6 +166,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
             @Override
             public void run() {
                 draw();
+                lbShape.setText(text);
             }
         }, 100, FPS);
 
@@ -135,7 +176,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private void finishPolygon() {
         if (drawable != null) {
             if (drawable instanceof Polygon) {
-                ((Polygon) drawable).setDone(true);
+                ((Polygon) drawable).setDone(false);
                 drawables.add(drawable);
                 drawable = null;
             }

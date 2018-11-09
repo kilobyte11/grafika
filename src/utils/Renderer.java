@@ -2,11 +2,13 @@ package utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import drawables.Edge;
 import drawables.Point;
+import ui.PgrfFrame;
+
+import static javafx.scene.input.KeyCode.G;
 
 public class Renderer {
 
@@ -126,12 +128,30 @@ public class Renderer {
         }
     }
 
+    public void seedFillTexture(int x, int y, int oldColor){
+
+        if (oldColor == img.getRGB(x, y)) {
+            if (x%3 == 0 && y%5 == 0 || y%2 == 0){
+                drawPixel(x, y, Color.YELLOW.getRGB());
+            }else{
+                drawPixel(x, y, Color.BLUE.getRGB());
+            }
+
+            seedFillTexture(x - 1, y, oldColor);
+            seedFillTexture(x + 1, y, oldColor);
+            seedFillTexture(x, y + 1, oldColor);
+            seedFillTexture(x, y - 1, oldColor);
+        }
+    }
+
+
     public void scanLine(List<Point> points, int borderColor, int fillColor) {
         int yMax = 0;
         int yMin = img.getHeight();
         List<Edge> edges = new ArrayList<>();
 
         for (int i = 0; i < points.size(); i++) {
+
             // vytváření úseček (Edge)
             // volání určitých metod
             // hledání hraničních y
