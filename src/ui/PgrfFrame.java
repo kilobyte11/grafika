@@ -41,6 +41,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private DrawableType type = DrawableType.LINE;
     private boolean fillMode = false;
 
+
     public static void main(String... args) {
         PgrfFrame pgrfFrame = new PgrfFrame();
         pgrfFrame.img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -75,7 +76,6 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         panel = new JPanel();
         add(panel);
 
-
         panel.addMouseMotionListener(this);
         panel.addMouseListener(new MouseAdapter() {
             @Override
@@ -108,6 +108,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                             drawable = null;
                         }
                     }
+
 
                 } else {
                    renderer.seedFillTexture(e.getX(), e.getY(), img.getRGB(e.getX(),e.getY()));
