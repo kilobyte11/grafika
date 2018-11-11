@@ -10,10 +10,16 @@ public class Edge {
         this.y1 = p1.getY();
         this.x2 = p2.getX();
         this.y2 = p2.getY();
+        compute();
     }
 
     public boolean isHorizontal(){
-        return false; //TODO
+        if (y1 == y2){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public void order(){

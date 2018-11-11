@@ -60,7 +60,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         add(lbShape, BorderLayout.NORTH);
 
         lbHelp = new JLabel();
-        lbHelp.setText(" U - úsečka, N - n-úhelník, F - vyplňování(zapnout/vypnout), SPACE - nový n-úhelník");
+        lbHelp.setText(" U = úsečka, N = n-úhelník, F = vyplňování(zapnout/vypnout), SPACE = nový n-úhelník");
         lbHelp.setFont(fontHelp);
         lbHelp.setForeground(Color.BLACK);
         lbHelp.setHorizontalAlignment(SwingConstants.LEFT);

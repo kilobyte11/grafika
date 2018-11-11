@@ -6,14 +6,13 @@ import java.util.*;
 
 import drawables.Edge;
 import drawables.Point;
-import ui.PgrfFrame;
-
-import static javafx.scene.input.KeyCode.G;
 
 public class Renderer {
 
     private int color;
     private BufferedImage img;
+    private Color texture[][];
+    private int[][] texture1[][];
 
     public Renderer(BufferedImage img) {
         this.img = img;
@@ -129,13 +128,19 @@ public class Renderer {
     }
 
     public void seedFillTexture(int x, int y, int oldColor){
+        final int ye = Color.YELLOW.getRGB();
+        final int bl = Color.BLUE.getRGB();
+        int[][] texture1 = {
+                { ye, ye, ye, ye, ye },
+                { ye, bl, ye, bl, ye },
+                { bl, ye, bl, ye, bl },
+                { bl, ye, ye, ye, bl },
+                { bl, ye, bl, ye, bl }
+        };
 
+        
         if (oldColor == img.getRGB(x, y)) {
-            if (x%3 == 0 && y%5 == 0 || y%2 == 0){
-                drawPixel(x, y, Color.YELLOW.getRGB());
-            }else{
-                drawPixel(x, y, Color.BLUE.getRGB());
-            }
+            drawPixel(x, y, texture1[x%5][y%5]);
 
             seedFillTexture(x - 1, y, oldColor);
             seedFillTexture(x + 1, y, oldColor);
@@ -149,9 +154,44 @@ public class Renderer {
         int yMax = 0;
         int yMin = img.getHeight();
         List<Edge> edges = new ArrayList<>();
+        List<Integer> intersection = new ArrayList<>();
 
         for (int i = 0; i < points.size(); i++) {
+            Point firstPoint = points.get(i);
+            Point secondPoint = points.get((i + 1) % points.size());
+            Edge edge = new Edge(firstPoint, secondPoint);   //vytvoreni hrany
 
+            if(edge.isHorizontal() == false)
+            {
+                edge.order();
+
+                edges.add(edge);
+            }
+
+            yMin = edge.yMin(points.get(i).getY());
+            yMax = edge.yMax(points.get(i).getY());
+        }
+
+        for (int y = yMin; y < yMax; y++) {
+            for (Edge edge : edges)
+            {
+                if (edge.isIntersection(y)){
+                    intersection.add(edge.findX(y));    //ukladani pruseciku do seznamu
+                }
+
+            }
+            Collections.sort(intersection);
+            //vykresleni useku
+            for (int i = 0; i < intersection.size() - 1 ; i+=2) {
+                lineDDA(intersection.get(i), y, intersection.get(i + 1), y, fillColor);
+            }
+
+            intersection.clear();
+
+        }
+        for (int i = 0; i < points.size(); i++) {
+            lineDDA(points.get(i).getX(), points.get(i).getY(),points.get((i + 1) % points.size()).getX(), points.get((i + 1) % points.size()).getY(),borderColor);
+        }
             // vytváření úseček (Edge)
             // volání určitých metod
             // hledání hraničních y
@@ -171,5 +211,4 @@ public class Renderer {
                     - seřadit dle x
             4) obtažení okrajů
          */
-    }
 }
