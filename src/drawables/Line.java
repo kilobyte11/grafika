@@ -1,8 +1,8 @@
 package drawables;
 
-import java.awt.Color;
-
 import utils.Renderer;
+
+import java.awt.*;
 
 public class Line implements Drawable {
 

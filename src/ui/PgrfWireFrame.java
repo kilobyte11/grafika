@@ -5,7 +5,10 @@ import transforms.Camera;
 import utils.Transformer;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class PgrfWireFrame extends JFrame {
-    static int FPS = 1000/30;
+    static int FPS = 1000 / 30;
     private BufferedImage img;
     static int width = 800;
     static int height = 600;
@@ -28,7 +31,7 @@ public class PgrfWireFrame extends JFrame {
 
     }
 
-    private void init(int width, int height){
+    private void init(int width, int height) {
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         // nastavení frame
@@ -71,10 +74,10 @@ public class PgrfWireFrame extends JFrame {
 
     }
 
-    private void draw(){
+    private void draw() {
         img.getGraphics().fillRect(0, 0, img.getWidth(), img.getHeight()); //clear
 
-        for (Solid solid : solids){
+        for (Solid solid : solids) {
             transformer.drawWireFrame(solid);
         }
 

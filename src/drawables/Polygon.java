@@ -1,10 +1,10 @@
 package drawables;
 
-import java.awt.Color;
+import utils.Renderer;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import utils.Renderer;
 
 public class Polygon implements Drawable {
 

@@ -10,7 +10,7 @@ public abstract class SolidData implements Solid {
     protected List<Point3D> verticies;
     protected List<Integer> indicies;
 
-    public SolidData(){
+    public SolidData() {
         verticies = new ArrayList<>();
         indicies = new ArrayList<>();
     }

@@ -14,24 +14,24 @@ public class Transformer {
     private Mat4 view;
     private Mat4 projection;
 
-    public Transformer(BufferedImage img){
+    public Transformer(BufferedImage img) {
         this.img = img;
     }
 
     // FUNKCE
-    public void drawWireFrame(Solid solid){
+    public void drawWireFrame(Solid solid) {
         // výsledná matice zobrazení
         Mat4 matFinal = model.mul(view).mul(projection);
 
         // první index: 1. bod, druhý index: druhý bod úsečky
-        for (int i = 0; i < solid.getIndicies().size(); i+=2) {
+        for (int i = 0; i < solid.getIndicies().size(); i += 2) {
             Point3D p1 = solid.getVerticies().get(solid.getIndicies().get(i));
-            Point3D p2 = solid.getVerticies().get(solid.getIndicies().get(i+1));
+            Point3D p2 = solid.getVerticies().get(solid.getIndicies().get(i + 1));
             transformEdge(matFinal, p1, p2);
         }
     }
 
-    private void transformEdge(Mat4 mat, Point3D p1, Point3D p2){
+    private void transformEdge(Mat4 mat, Point3D p1, Point3D p2) {
         // todo 1.) vynásobit body maticí
         // 2.) ořez dle w z bodů
         // 3.) tvorba z vektorů dehomogenizací (Point3D.dehomog())

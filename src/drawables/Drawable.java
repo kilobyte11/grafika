@@ -1,8 +1,8 @@
 package drawables;
 
-import java.awt.Color;
-
 import utils.Renderer;
+
+import java.awt.*;
 
 public interface Drawable {
 
@@ -12,9 +12,10 @@ public interface Drawable {
 
     int getColor();
 
-    default int getFillColor(){
-        return Color.BLACK.getRGB();
+    default void setColor(int color) {
     }
 
-    default void setColor(int color){}
+    default int getFillColor() {
+        return Color.BLACK.getRGB();
+    }
 }

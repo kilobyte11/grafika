@@ -5,7 +5,7 @@ public class Edge {
     int x1, y1, x2, y2;
     float k, q;
 
-    public Edge(Point p1, Point p2){
+    public Edge(Point p1, Point p2) {
         this.x1 = p1.getX();
         this.y1 = p1.getY();
         this.x2 = p2.getX();
@@ -13,19 +13,18 @@ public class Edge {
         compute();
     }
 
-    public boolean isHorizontal(){
+    public boolean isHorizontal() {
         // zjistí zda je úsečká horizontální
-        if (y1 == y2){
+        if (y1 == y2) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    public void order(){
+    public void order() {
         //seřadí dle y1 < y2
-        if (y1 > y2){
+        if (y1 > y2) {
             int pom = y2;
             y2 = y1;
             y1 = pom;
@@ -36,60 +35,61 @@ public class Edge {
 
     }
 
-    public void cut(){
+    public void cut() {
         // ořízne poslední pixel
-        y2 =-1;
-        x2 =-1;
+        y2 = -1;
+        x2 = -1;
     }
 
-    public void compute(){
+    public void compute() {
         // vypočítá k a q
         int dy = y2 - y1;
         int dx = x2 - x1;
         k = dy / (float) dx;
-        q = y1 - k*x1;
+        q = y1 - k * x1;
 
     }
 
-    public int findX(int y){
+    public int findX(int y) {
         // vypočítá X dle y,k,q
         // y = kx + q
-        int x = (int) ((y - q)/k);
+        int x = (int) ((y - q) / k);
         return x;
     }
 
-    public boolean isIntersection(int y){
+    public boolean isIntersection(int y) {
         // - true když y > y1 && y < y2
-        if (y >= y1 && y < y2){
+        if (y >= y1 && y < y2) {
             return true;
-        } else{
+        } else {
             return false;
         }
 
     }
 
-    public int yMin(int yMin){
+    public int yMin(int yMin) {
         //vrátí nejmenší y
-        if (y1 < yMin){
+        if (y1 < yMin) {
             yMin = y1;
         }
-        if (y2 < yMin){
+        if (y2 < yMin) {
             yMin = y2;
         }
         return yMin;
     }
-    public int yMax(int yMax){
+
+    public int yMax(int yMax) {
         //vrátí největší y
-        if (y1 > yMax){
+        if (y1 > yMax) {
             yMax = y1;
         }
-        if (y2 > yMax){
+        if (y2 > yMax) {
             yMax = y2;
         }
         return yMax;
     }
 
-    public boolean inside(Point p){
+    public boolean inside(Point p) {
         // pozor na orientaci!! kdyžtak otočit
         Point v1 = new Point(x2 - x1, y2 - y1);
         Point n1 = new Point(v1.getY(), -v1.getX());

@@ -8,6 +8,7 @@ public interface Solid {
 
     // seznam bodů objektu
     List<Point3D> getVerticies();
+
     // indexy bodů společně propojených
     List<Integer> getIndicies();
 }

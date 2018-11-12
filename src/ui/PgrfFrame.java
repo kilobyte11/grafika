@@ -1,24 +1,18 @@
 package ui;
 
+import drawables.*;
+import drawables.Point;
+import drawables.Polygon;
+import utils.Renderer;
+
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.swing.*;
-
-import drawables.*;
-import drawables.Point;
-import drawables.Polygon;
-import transforms.Col;
-import utils.Renderer;
 
 public class PgrfFrame extends JFrame implements MouseMotionListener {
 
@@ -40,7 +34,6 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private DrawableType type = DrawableType.LINE;
     private boolean fillMode = false;
     private boolean scanLine = false;
-
 
 
     public static void main(String... args) {
@@ -99,7 +92,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                             drawable = new Polygon();
                         }
                         if (drawable instanceof Polygon) {
-                            if (e.getClickCount() == 2){
+                            if (e.getClickCount() == 2) {
                                 finishPolygon();
                             } else {
                                 ((Polygon) drawable).addPoint(
@@ -112,7 +105,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
 
 
                 } else {
-                    renderer.seedFillTexture(e.getX(), e.getY(), img.getRGB(e.getX(),e.getY()));
+                    renderer.seedFillTexture(e.getX(), e.getY(), img.getRGB(e.getX(), e.getY()));
                 }
 
                 super.mouseClicked(e);
@@ -126,14 +119,14 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_U) {
                     type = DrawableType.LINE;
-                    if (!fillMode){
-                        text ="tvar: čára";
+                    if (!fillMode) {
+                        text = "tvar: čára";
                     }
 
                 }
                 if (e.getKeyCode() == KeyEvent.VK_N) {
                     type = DrawableType.POLYGON;
-                    if (!fillMode){
+                    if (!fillMode) {
                         text = "tvar: n-úhelník";
                     }
 
@@ -144,18 +137,18 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_F) {
                     fillMode = !fillMode;
-                    if (!fillMode){
+                    if (!fillMode) {
                         text = textPrev;
-                    }else{
+                    } else {
                         textPrev = text;
                         text = "vyplňování";
                     }
                 }
-                if (e.getKeyCode() == KeyEvent.VK_S){
+                if (e.getKeyCode() == KeyEvent.VK_S) {
                     scanLine = !scanLine;
-                    if (!scanLine){
+                    if (!scanLine) {
                         text = textPrev;
-                    }else{
+                    } else {
                         textPrev = text;
                         text = "vyplňování - scanline";
                     }
@@ -203,7 +196,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
             drawable.draw(renderer);
         }
 
-        if(scanLine){
+        if (scanLine) {
             renderer.scanLine(((Polygon) drawable).getPoints(), Color.BLUE.getRGB(), Color.GREEN.getRGB());
         }
 
