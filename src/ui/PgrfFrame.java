@@ -19,6 +19,7 @@ import drawables.DrawableType;
 import drawables.Line;
 import drawables.Point;
 import drawables.Polygon;
+import transforms.Col;
 import utils.Renderer;
 
 public class PgrfFrame extends JFrame implements MouseMotionListener {
@@ -195,6 +196,15 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         if (drawable != null) {
             drawable.draw(renderer);
         }
+
+        List<Point> points = new ArrayList<>();
+        points.add(new Point(100, 100));
+        points.add(new Point(200, 100));
+        points.add(new Point(200, 200));
+        points.add(new Point(100, 200));
+        points.add(new Point(10,10));
+        points.add(new Point(300,300));
+        renderer.scanLine(points, Color.GREEN.getRGB(), Color.RED.getRGB());
 
         panel.getGraphics().drawImage(img, 0, 0, null);
         panel.paintComponents(getGraphics());

@@ -161,7 +161,7 @@ public class Renderer {
             Point secondPoint = points.get((i + 1) % points.size());
             Edge edge = new Edge(firstPoint, secondPoint);   //vytvoreni hrany
 
-            if(edge.isHorizontal() == false)
+            if(!edge.isHorizontal())
             {
                 edge.order();
 
@@ -189,9 +189,11 @@ public class Renderer {
             intersection.clear();
 
         }
+
         for (int i = 0; i < points.size(); i++) {
             lineDDA(points.get(i).getX(), points.get(i).getY(),points.get((i + 1) % points.size()).getX(), points.get((i + 1) % points.size()).getY(),borderColor);
         }
+
             // vytváření úseček (Edge)
             // volání určitých metod
             // hledání hraničních y

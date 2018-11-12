@@ -87,4 +87,19 @@ public class Edge {
         }
         return yMax;
     }
+
+    public boolean inside(Point p){
+        // pozor na orientaci!! kdyžtak otočit
+        Point v1 = new Point(x2 - x1, y2 - y1);
+        Point n1 = new Point(v1.getY(), -v1.getX());
+        Point v2 = new Point(p.getX() - x1, p.getY() - y1);
+        return (n1.getX() * v2.getX() + n1.getY() * v2.getY()) < 0;
+    }
+
+    public Point intersection(Point v1, Point v2) {
+        float px = ((v1.getX() * v2.getY() - v1.getY() * v2.getX()) * (x1 - x2) - (x1 * y2 - y1 * x2) * (v1.getX() - v2.getX())) / (float) ((v1.getX() - v2.getX()) * (y1 - y2) - (x1 - x2) * (v1.getY() - v2.getY()));
+        float py = ((v1.getX() * v2.getY() - v1.getY() * v2.getX()) * (y1 - y2) - (x1 * y2 - y1 * x2) * (v1.getY() - v2.getY())) / (float) ((v1.getX() - v2.getX()) * (y1 - y2) - (x1 - x2) * (v1.getY() - v2.getY()));
+        return new Point(Math.round(px), Math.round(py));
+    }
+
 }
