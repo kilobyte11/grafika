@@ -14,9 +14,7 @@ import java.util.TimerTask;
 
 import javax.swing.*;
 
-import drawables.Drawable;
-import drawables.DrawableType;
-import drawables.Line;
+import drawables.*;
 import drawables.Point;
 import drawables.Polygon;
 import transforms.Col;
@@ -41,6 +39,8 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private boolean firstClickLine = true;
     private DrawableType type = DrawableType.LINE;
     private boolean fillMode = false;
+    private boolean scanLine = false;
+
 
 
     public static void main(String... args) {
@@ -50,7 +50,6 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     }
 
     private void init(int width, int height) {
-        // popisek !!!!!!!!!!!!!!!!
         Font fontShape = new Font("Arial", Font.BOLD, 20);
         Font fontHelp = new Font("Arial", Font.BOLD, 15);
 
@@ -62,7 +61,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         add(lbShape, BorderLayout.NORTH);
 
         lbHelp = new JLabel();
-        lbHelp.setText(" U = úsečka, N = n-úhelník, F = vyplňování(zapnout/vypnout), SPACE = nový n-úhelník");
+        lbHelp.setText(" U = úsečka, N = n-úhelník, F = vyplňování(zapnout/vypnout), SPACE = nový n-úhelník, S = scan-line");
         lbHelp.setFont(fontHelp);
         lbHelp.setForeground(Color.BLACK);
         lbHelp.setHorizontalAlignment(SwingConstants.LEFT);
@@ -76,6 +75,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         drawables = new ArrayList<>();
         panel = new JPanel();
         add(panel);
+
 
         panel.addMouseMotionListener(this);
         panel.addMouseListener(new MouseAdapter() {
@@ -112,11 +112,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
 
 
                 } else {
-                   renderer.seedFillTexture(e.getX(), e.getY(), img.getRGB(e.getX(),e.getY()));
-                /*    renderer.seedFill(e.getX(), e.getY(),
-                            img.getRGB(e.getX(), e.getY()),
-                            Color.BLACK.getRGB());
-                */
+                    renderer.seedFillTexture(e.getX(), e.getY(), img.getRGB(e.getX(),e.getY()));
                 }
 
                 super.mouseClicked(e);
@@ -143,6 +139,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
 
                 }
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    scanLine = false;
                     finishPolygon();
                 }
                 if (e.getKeyCode() == KeyEvent.VK_F) {
@@ -152,6 +149,15 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
                     }else{
                         textPrev = text;
                         text = "vyplňování";
+                    }
+                }
+                if (e.getKeyCode() == KeyEvent.VK_S){
+                    scanLine = !scanLine;
+                    if (!scanLine){
+                        text = textPrev;
+                    }else{
+                        textPrev = text;
+                        text = "vyplňování - scanline";
                     }
                 }
 
@@ -197,14 +203,9 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
             drawable.draw(renderer);
         }
 
-        List<Point> points = new ArrayList<>();
-        points.add(new Point(100, 100));
-        points.add(new Point(200, 100));
-        points.add(new Point(200, 200));
-        points.add(new Point(100, 200));
-        points.add(new Point(10,10));
-        points.add(new Point(300,300));
-        renderer.scanLine(points, Color.GREEN.getRGB(), Color.RED.getRGB());
+        if(scanLine){
+            renderer.scanLine(((Polygon) drawable).getPoints(), Color.BLUE.getRGB(), Color.GREEN.getRGB());
+        }
 
         panel.getGraphics().drawImage(img, 0, 0, null);
         panel.paintComponents(getGraphics());

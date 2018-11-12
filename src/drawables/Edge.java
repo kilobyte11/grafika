@@ -14,6 +14,7 @@ public class Edge {
     }
 
     public boolean isHorizontal(){
+        // zjistí zda je úsečká horizontální
         if (y1 == y2){
             return true;
         }
@@ -23,7 +24,7 @@ public class Edge {
     }
 
     public void order(){
-        //seřadit dle y1 < y2
+        //seřadí dle y1 < y2
         if (y1 > y2){
             int pom = y2;
             y2 = y1;
@@ -36,22 +37,22 @@ public class Edge {
     }
 
     public void cut(){
-        // oříznout poslední pixel
+        // ořízne poslední pixel
         y2 =-1;
         x2 =-1;
     }
 
     public void compute(){
-        // vypočítat k a q
+        // vypočítá k a q
         int dy = y2 - y1;
         int dx = x2 - x1;
         k = dy / (float) dx;
-        q = dy - k*dx;
+        q = y1 - k*x1;
 
     }
 
     public int findX(int y){
-        // vypočítat X dle y,k,q
+        // vypočítá X dle y,k,q
         // y = kx + q
         int x = (int) ((y - q)/k);
         return x;
@@ -59,7 +60,7 @@ public class Edge {
 
     public boolean isIntersection(int y){
         // - true když y > y1 && y < y2
-        if (y > y1 && y < y2){
+        if (y >= y1 && y < y2){
             return true;
         } else{
             return false;
@@ -68,7 +69,7 @@ public class Edge {
     }
 
     public int yMin(int yMin){
-        //dle y1, y2 a yMin rozhodnout které vracíme
+        //vrátí nejmenší y
         if (y1 < yMin){
             yMin = y1;
         }
@@ -78,7 +79,7 @@ public class Edge {
         return yMin;
     }
     public int yMax(int yMax){
-        //dle y1,y2,yMax navrátit maxHodnotu
+        //vrátí největší y
         if (y1 > yMax){
             yMax = y1;
         }

@@ -53,4 +53,8 @@ public class Polygon implements Drawable {
     public void setDone(boolean done) {
         this.done = done;
     }
+
+    public List<Point> getPoints() {
+        return points;
+    }
 }

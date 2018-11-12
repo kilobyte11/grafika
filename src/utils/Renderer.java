@@ -3,9 +3,9 @@ package utils;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.*;
-
 import drawables.Edge;
 import drawables.Point;
+import drawables.Polygon;
 
 public class Renderer {
 
@@ -130,6 +130,7 @@ public class Renderer {
     public void seedFillTexture(int x, int y, int oldColor){
         final int ye = Color.YELLOW.getRGB();
         final int bl = Color.BLUE.getRGB();
+        // matice vzor
         int[][] texture1 = {
                 { ye, ye, ye, ye, ye },
                 { ye, bl, ye, bl, ye },
@@ -157,14 +158,13 @@ public class Renderer {
         List<Integer> intersection = new ArrayList<>();
 
         for (int i = 0; i < points.size(); i++) {
-            Point firstPoint = points.get(i);
-            Point secondPoint = points.get((i + 1) % points.size());
-            Edge edge = new Edge(firstPoint, secondPoint);   //vytvoreni hrany
+            Point startPoint = points.get(i);   // počáteční bod úsečky
+            Point endPoint = points.get((i + 1) % points.size());   // konečný bod úsečky
+            Edge edge = new Edge(startPoint, endPoint); // úsečka
 
             if(!edge.isHorizontal())
             {
                 edge.order();
-
                 edges.add(edge);
             }
 
@@ -173,44 +173,26 @@ public class Renderer {
         }
 
         for (int y = yMin; y < yMax; y++) {
+            intersection.clear();
             for (Edge edge : edges)
             {
                 if (edge.isIntersection(y)){
-                    intersection.add(edge.findX(y));    //ukladani pruseciku do seznamu
+                    intersection.add(edge.findX(y));    // jestliže je y v rozmezí y1 a y2 vypočítá pro něj x a přidá ho mezi průsečíků
                 }
-
             }
             Collections.sort(intersection);
-            //vykresleni useku
+            
             for (int i = 0; i < intersection.size() - 1 ; i+=2) {
-                lineDDA(intersection.get(i), y, intersection.get(i + 1), y, fillColor);
+                lineDDA(intersection.get(i), y, intersection.get(i + 1), y, fillColor); // projde všechny průsečíky a vykreslí mezi dvojicemi úsečky
             }
-
-            intersection.clear();
-
         }
 
         for (int i = 0; i < points.size(); i++) {
-            lineDDA(points.get(i).getX(), points.get(i).getY(),points.get((i + 1) % points.size()).getX(), points.get((i + 1) % points.size()).getY(),borderColor);
+            lineDDA(points.get(i).getX(), points.get(i).getY(),points.get((i + 1) % points.size()).getX(),
+                    points.get((i + 1) % points.size()).getY(),borderColor);    // vykreslí okraje
         }
 
-            // vytváření úseček (Edge)
-            // volání určitých metod
-            // hledání hraničních y
-            // přidání Edge do seznamu Edges
-        }
+    }
+    
 
-        /* TODO
-            2) definice seznamu úseček
-                - z bodů Edges
-                - seřadit dle (y1 < y2)
-                - vypočítat koeficienty k a q
-                - oříznout poslední pixel
-            3) for cyklus od yMin do yMax
-                - pro každé y hledáme průsečík s úsečkami
-                - seznam průsečíků
-                - pro sudý počet průsečíků ..
-                    - seřadit dle x
-            4) obtažení okrajů
-         */
 }
